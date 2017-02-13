@@ -1,4 +1,4 @@
-#
+# # Do pre-processing to take clean dataset.
 preProcessing <- function(x){
   # Processing missing value
   l <- ncol(x)-1
@@ -18,7 +18,8 @@ preProcessing <- function(x){
 }
 
 #########################################################################################
-#
+
+# # The product characteristic variables are categorized into six class from very low to very high.
 dataBinning <- function(x, class = TRUE){
   if(class)
     ln <- length(x) -1
@@ -40,7 +41,9 @@ dataBinning <- function(x, class = TRUE){
 }
 
 #########################################################################################
-# The dataset must include class attribute.
+
+# # Split the dataset into training and test dataset (uesing caTools lib).
+# # The dataset must include class attribute.
 dataSplit <- function(x, labels, seed = 101, rate = .75, class = TRUE){
   if(!class){
     y <- labels

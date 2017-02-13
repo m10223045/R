@@ -5,6 +5,7 @@ source("resource.R")
 
 loadSources()
 # # Subset the secom dataset to only 2 labels
+# # Where –1 corresponds to a pass and 1 corresponds to a fail.
 secom <- read.csv("dataset/secom/secom.csv")
 secom <- preProcessing(secom)
 
@@ -19,10 +20,13 @@ x <- fs.ridge(x,y,40)
 cqpmData <- pca.cqpm(x)
 data_temp <- cqpmData$c5
 data_temp <- data.frame(cbind(data_temp,y))
+
+# # The product characteristic variables are categorized into 
+# # six class from very low to very high useing dataBinning function.
 data_temp <- dataBinning(data_temp)
 # data_temp <- round(data_temp, digits = 6) * 1000000
 
-# # Split data to train and test (uesing caTools lib).
+# # Split data into training and test dataset.
 data_temp <- dataSplit(data_temp, y)
 train <- data_temp$train
 testLabel <- data_temp$test$y
@@ -69,16 +73,24 @@ allComp.split <- dataSplit(allComp, y)
 modelSVM.allComp <- svm(y ~ ., data = allComp.split$train, type='C-classification', kernel='linear')
 pSVM.allComp <- predict(modelSVM.allComp, subset(allComp.split$test), select = -y)
 
-# SVM use original secom dataset.
+# # SVM use original secom dataset.
 modelSVM.original <- svm(LABEL ~ ., data=secom, type='C-classification', kernel='linear')
 pSVM.original <- predict(modelSVM.original, secom)
 
+measureROC(testLabel, pID3)
+measureROC(testLabel, pRPART)
+measureROC(testLabel, pC50)
+measureROC(testLabel, pSVM)
+measureROC(testLabel, pSVM.allComp)
+measureROC(y, pSVM.original)
 
-table(Actual=testLabel, Fitted=pID3)
-table(Actual=testLabel, Fitted=pRPART)
-table(Actual=testLabel, Fitted=pC50)
-table(Actual=testLabel, Fitted=pSVM)
-table(Actual=testLabel, Fitted=pSVM.allComp)
-table(Actual=y, Fitted=pSVM.original)
+# table(Actual=testLabel, Fitted=pID3)
+# table(Actual=testLabel, Fitted=pRPART)
+# table(Actual=testLabel, Fitted=pC50)
+# table(Actual=testLabel, Fitted=pSVM)
+# table(Actual=testLabel, Fitted=pSVM.allComp)
+# table(Actual=y, Fitted=pSVM.original)
+
+
 
 
