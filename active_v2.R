@@ -1,38 +1,37 @@
 setwd("/Volumes/SANDISK_III/project/R/CQPMpca_id3/qrm")
 
-# Loading function and library
+# # Loading function and library
 source("resource.R")
 
 loadSources()
-# Subset the secom dataset to only 2 labels
+# # Subset the secom dataset to only 2 labels
 secom <- read.csv("dataset/secom/secom.csv")
 secom <- preProcessing(secom)
 
 x <- subset(secom, select = -LABEL)
 y <- secom$LABEL
 
-# Feature selection.
+# # Feature selection.
 x <- fs.ridge(x,y,40)
 # fs.svm.x <- fs.svm(secom, y)
 
-# Modeling.
+# # Modeling.
 cqpmData <- pca.cqpm(x)
 data_temp <- cqpmData$c5
-data_temp <- round(data_temp, digits = 6) * 1000000
 data_temp <- data.frame(cbind(data_temp,y))
+data_temp <- dataBinning(data_temp)
+# data_temp <- round(data_temp, digits = 6) * 1000000
 
-# Split data to train and test (uesing caTools lib).
-set.seed(101) 
-sample = sample.split(data_temp$y, SplitRatio = .75)
-train = subset(data_temp, sample == TRUE)
-test = subset(data_temp, sample == FALSE)
-testLabel <- test$y
-test <- test[,1:22]
+# # Split data to train and test (uesing caTools lib).
+data_temp <- dataSplit(data_temp, y)
+train <- data_temp$train
+testLabel <- data_temp$test$y
+test <- subset(data_temp$test, select = -y)
 
 
 # # ChiMerge:Discretization of numeric attributs. (out=c("symb","num"))
-library(dprep)
-train.disc <- chiMerge(train, 1:22, alpha = 0.05, out = "num")
+# library(dprep)
+# train.disc <- chiMerge(train, 1:22, alpha = 0.05, out = "num")
 
 
 # # Recursive setting. 
@@ -44,7 +43,7 @@ train.disc <- chiMerge(train, 1:22, alpha = 0.05, out = "num")
 # # ID3
 modelID3 <- ID3(train,'y')
 pID3 <- predict_ID3(train, modelID3)
-pID3 <- predict_ID3(test[1,1:22], modelID3)
+pID3 <- predict_ID3(test, modelID3)
 
 # # rpart
 modelRPART <- rpart(y~., data=train, method = "class")
@@ -64,20 +63,22 @@ modelSVM <- svm(y ~ ., data=train, type='C-classification', kernel='linear')
 pSVM <- predict(modelSVM, test)
 
 # # SVM use all compenet from PAC s_c5.
-train.all <- data.frame(cbind(cqpmData$pca_c5$scores,y))
-modelSVM.all <- svm(y ~ ., data=train.all, type='C-classification', kernel='linear')
-pSVM.all <- predict(modelSVM.all, train.all)
+allComp <- data.frame(cbind(cqpmData$pca_c5$scores, y))
+allComp <- dataBinning(allComp)
+allComp.split <- dataSplit(allComp, y)
+modelSVM.allComp <- svm(y ~ ., data = allComp.split$train, type='C-classification', kernel='linear')
+pSVM.allComp <- predict(modelSVM.allComp, subset(allComp.split$test), select = -y)
 
 # SVM use original secom dataset.
 modelSVM.original <- svm(LABEL ~ ., data=secom, type='C-classification', kernel='linear')
 pSVM.original <- predict(modelSVM.original, secom)
 
 
-# table(Actual=testLabel, Fitted=pID3)
+table(Actual=testLabel, Fitted=pID3)
 table(Actual=testLabel, Fitted=pRPART)
 table(Actual=testLabel, Fitted=pC50)
 table(Actual=testLabel, Fitted=pSVM)
-table(Actual=testLabel, Fitted=pSVM.all)
+table(Actual=testLabel, Fitted=pSVM.allComp)
 table(Actual=y, Fitted=pSVM.original)
 
 
