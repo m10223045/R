@@ -1,10 +1,11 @@
 
 loadSources <- function(){
-  library(RColorBrewer)
+  # R tools lib
+  require(RColorBrewer)
+  require(caTools)
   
   # Decision tree lib
   require(C50)
-  require(caTools)
   require(rpart)
   
   # SVM lib
