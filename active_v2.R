@@ -97,6 +97,3 @@ measureROC(y, pSVM.original)
 # table(Actual=testLabel, Fitted=pSVM.allComp)
 # table(Actual=y, Fitted=pSVM.original)
 
-
-
-
