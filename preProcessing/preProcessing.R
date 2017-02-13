@@ -35,6 +35,8 @@ dataBinning <- function(x, class = TRUE){
     # print(summary(f))
   }
   # print(x)
+  
+  return(x)
 }
 
 #########################################################################################
@@ -49,8 +51,8 @@ dataSplit <- function(x, labels, seed = 101, rate = .75, class = TRUE){
   sample = sample.split(labels, SplitRatio = rate)
   train = subset(x, sample == TRUE)
   test = subset(x, sample == FALSE)
-  print(train)
-  print(test)
+  # print(train)
+  # print(test)
   
   list(train = train, test = test)
 }
