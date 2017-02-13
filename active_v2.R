@@ -23,16 +23,26 @@ cqpmData <- pca.cqpm(x)
 data_temp <- cqpmData$c5
 data_temp <- data.frame(cbind(data_temp,y))
 
+###########################################################################
+# # Binning and Split.
+
 # # The product characteristic variables are categorized into 
 # # six class from very low to very high useing dataBinning function.
-data_temp <- dataBinning(data_temp)
 # data_temp <- round(data_temp, digits = 6) * 1000000
+binning.data_temp <- dataBinning(data_temp)
+
 
 # # Split data into training and test dataset.
-data_temp <- dataSplit(data_temp, y)
-train <- data_temp$train
-testLabel <- data_temp$test$y
-test <- subset(data_temp$test, select = -y)
+split.data_temp <- dataSplit(data_temp, y)
+train <- split.data_temp$train
+testLabel <- split.data_temp$test$y
+test <- subset(split.data_temp$test, select = -y)
+
+# # Split data into training and test dataset.
+binning.data_temp <- dataSplit(binning.data_temp, y)
+binning.train <- binning.data_temp$train
+binning.testLabel <- binning.data_temp$test$y
+binning.test <- subset(binning.data_temp$test, select = -y)
 
 
 # # ChiMerge:Discretization of numeric attributs. (out=c("symb","num"))
@@ -48,9 +58,8 @@ test <- subset(data_temp$test, select = -y)
 # # Rule extruction.
 
 # # ID3
-modelID3 <- ID3(train,'y')
-pID3 <- predict_ID3(train, modelID3)
-pID3 <- predict_ID3(test, modelID3)
+modelID3 <- ID3(binning.train,'y')
+pID3 <- predict_ID3(binning.test, modelID3)
 
 # # rpart
 modelRPART <- rpart(y~., data=train, method = "class")
@@ -60,8 +69,7 @@ plot(modelRPART.tree)
 text(modelRPART.tree)
 
 # # C5.0
-train.part <- train[,1:22]
-modelC50 <- C5.0(train.part,as.factor(train$y))
+modelC50 <- C5.0(subset(train, select = -y),as.factor(train$y))
 pC50 <- predict(modelC50, test)
 plot(modelC50)
 
@@ -83,17 +91,19 @@ pSVM.original <- predict(modelSVM.original, secom)
 ###########################################################################
 # # Meesure of performace.
 
-measureROC(testLabel, pID3)
-measureROC(testLabel, pRPART)
-measureROC(testLabel, pC50)
-measureROC(testLabel, pSVM)
-measureROC(testLabel, pSVM.allComp)
-measureROC(y, pSVM.original)
-
 # table(Actual=testLabel, Fitted=pID3)
 # table(Actual=testLabel, Fitted=pRPART)
 # table(Actual=testLabel, Fitted=pC50)
 # table(Actual=testLabel, Fitted=pSVM)
 # table(Actual=testLabel, Fitted=pSVM.allComp)
 # table(Actual=y, Fitted=pSVM.original)
+
+measureROC(binning.testLabel, pID3)
+measureROC(testLabel, pRPART)
+measureROC(testLabel, pC50)
+measureROC(testLabel, pSVM)
+measureROC(testLabel, pSVM.allComp)
+measureROC(y, pSVM.original)
+
+
 
