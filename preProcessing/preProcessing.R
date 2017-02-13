@@ -32,9 +32,9 @@ dataBinning <- function(x, class = TRUE){
     breaks <- c( (-(2*dataSD)+dataMean), (-dataSD+dataMean), dataMean, (dataSD+dataMean), ((2*dataSD)+dataMean))
     f <- cut(x[,i], c(-Inf, breaks, Inf), include.lowest = TRUE, right = FALSE, labels = ll)
     x[,i] <- f 
-    print(summary(f))
+    # print(summary(f))
   }
-  print(x)
+  # print(x)
 }
 
 #########################################################################################
