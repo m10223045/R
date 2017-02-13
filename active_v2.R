@@ -16,7 +16,9 @@ y <- secom$LABEL
 x <- fs.ridge(x,y,40)
 # fs.svm.x <- fs.svm(secom, y)
 
+###########################################################################
 # # Modeling.
+
 cqpmData <- pca.cqpm(x)
 data_temp <- cqpmData$c5
 data_temp <- data.frame(cbind(data_temp,y))
@@ -38,12 +40,13 @@ test <- subset(data_temp$test, select = -y)
 # train.disc <- chiMerge(train, 1:22, alpha = 0.05, out = "num")
 
 
-# # Recursive setting. 
+# # Recursive setting.
 # getOption('expressions')
 # options(expressions = 50000)
 
-#################################################################
+###########################################################################
 # # Rule extruction.
+
 # # ID3
 modelID3 <- ID3(train,'y')
 pID3 <- predict_ID3(train, modelID3)
@@ -76,6 +79,9 @@ pSVM.allComp <- predict(modelSVM.allComp, subset(allComp.split$test), select = -
 # # SVM use original secom dataset.
 modelSVM.original <- svm(LABEL ~ ., data=secom, type='C-classification', kernel='linear')
 pSVM.original <- predict(modelSVM.original, secom)
+
+###########################################################################
+# # Meesure of performace.
 
 measureROC(testLabel, pID3)
 measureROC(testLabel, pRPART)

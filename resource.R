@@ -10,6 +10,10 @@ loadSources <- function(){
   # SVM lib
   require(e1071)
   
+  # Load measure function.
+  mf <- "measurement/measureROC.R"
+  source(mf)
+  
   # Load proProcessing function.
   pp <- "preProcessing/preProcessing.R"
   source(pp)
