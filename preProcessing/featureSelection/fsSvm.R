@@ -19,7 +19,7 @@
 # #fs.method = c("scad", "1norm", "scad+L2", "DrHSVM"),
 
 fs.svm <- function(x,y){
-  require(penalizedSVM)
+  # require(penalizedSVM)
   
   seed<- 123
   

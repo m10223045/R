@@ -1,6 +1,6 @@
 # Feature selection ues ridge regression and corss validation.
 fs.ridge <- function(x, y, n){
-  library(parcor)
+  # library(parcor)
   
   system.time(ridge <- ridge.cv(data.matrix(x),y))
   #ridge <- ridge.cv(data.matrix(x),y)

@@ -1,12 +1,24 @@
-
 loadSources <- function(){
+ 
+  lib.tools <- c("RColorBrewer", "caTools","stats", "RColorBrewer", "parcor")
+  lib.DT <- c("C50","rpart", "rpart.plot")
+  lib.SVM<- c("e1071", "penalizedSVM")
+  
+  # To install librarys if they are not install..
+  install.libs(lib.tools)
+  install.libs(lib.DT)
+  install.libs(lib.SVM)
+  
   # R tools lib
   require(RColorBrewer)
   require(caTools)
+  require(stats)
+  require(parcor)
   
   # Decision tree lib
   require(C50)
   require(rpart)
+  require(rpart.plot)
   
   # SVM lib
   require(e1071)
@@ -37,3 +49,15 @@ loadSources <- function(){
   reRoot <- "ruleExtraction/"
   for(i in reList) source(paste(reRoot,i,sep=""))
 }
+
+is.installed <- function(mypkg) is.element(mypkg, installed.packages()[,1])
+
+install.libs <- function(libs){
+  for(i in libs){
+    if(!is.installed(i)) install.packages(i)
+  }
+}
+
+#######################################################################
+# # NOTE SPACE
+

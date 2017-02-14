@@ -1,5 +1,5 @@
 fs.svmGreedy <- function(secom, x){
-  require(e1071)
+  # require(e1071)
   
   l <- length(x) - 40
   for(j in 1:l){
