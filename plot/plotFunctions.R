@@ -1,3 +1,4 @@
+# # This part still not complete.
 plot.draw <- function(x, y, label){
   library(RColorBrewer)
   label[label==-1] <- 2
