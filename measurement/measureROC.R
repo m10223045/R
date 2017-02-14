@@ -1,4 +1,4 @@
-measureROC <- function(actual, fitted){
+measureROC <- function(actual, fitted, digits = 2){
   t <- table(Actual=actual, Fitted = fitted)
   # t <- table(Actual=testLabel, Fitted=pID3)
   tFrame <- data.frame(t)
@@ -22,9 +22,11 @@ measureROC <- function(actual, fitted){
   TN.rate <- TN/N
   FN.rate <- FN/P
   ACC <- (TP+TN)/(P+N)
-  ROC.Rate <- data.frame(cbind(TP.rate, FP.rate, TN.rate, FN.rate, ACC))
-  ROC.Rate <- round(ROC.Rate, digits = 2)
+  
+  ROC.Rate <- data.frame(cbind(TP.rate, TN.rate, FP.rate, FN.rate, ACC))
+  ROC.Rate <- round(ROC.Rate, digits = 4)
   # colnames(ROC.Rate) <- c("TP.rate=TP/P", "FP.rate=FP/N", "TN.rate=TN/N", "FN.rate=FN/P", "ACC=(TP+TN)/(P+N)")
+  
   ROC.Condition <- data.frame(cbind(P,N,TP,FN,FP,TN))
   
   list(Table = t, ROC.Rate = ROC.Rate, ROC.Condition = ROC.Condition)

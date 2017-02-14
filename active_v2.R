@@ -19,7 +19,8 @@ x <- fs.ridge(x,y,40)
 ###########################################################################
 # # Modeling.
 
-cqpmData <- pca.cqpm(x)
+# cqpmData <- pca.cqpm(x)
+cqpmData <- pca.cqpm.origin(secom)
 data_temp <- cqpmData$c5
 data_temp <- data.frame(cbind(data_temp,y))
 

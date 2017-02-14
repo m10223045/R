@@ -28,7 +28,7 @@ loadSources <- function(){
   for(i in fsList) source(paste(fsRoot,i,sep=""))
   
   # Load modeling functions.
-  mdList <- c("pca_cqpm.R")
+  mdList <- c("pca_cqpm.R","pca_cqpm.origin.R")
   mdRoot <- "modeling/"
   for(i in mdList) source(paste(mdRoot,i,sep=""))
   
