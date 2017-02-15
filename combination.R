@@ -60,8 +60,9 @@ comb1 <- function(x, y){
   pSVM.allComp <- predict(modelSVM.allComp, subset(allComp.split$test), select = -y)
   
   # # SVM use original secom dataset.
-  modelSVM.original <- svm(LABEL ~ ., data=secom, type='C-classification', kernel='linear')
-  pSVM.original <- predict(modelSVM.original, secom)
+  split.secom <- dataSplit(secom, secom$LABEL)
+  modelSVM.original <- svm(LABEL ~ ., data=split.secom$train, type='C-classification', kernel='linear')
+  pSVM.original <- predict(modelSVM.original, subset(split.secom$test, select = -LABEL))
   
   ###########################################################################
   # # Meesure of performace.
@@ -72,6 +73,7 @@ comb1 <- function(x, y){
   # table(Actual=testLabel, Fitted=pSVM)
   # table(Actual=testLabel, Fitted=pSVM.allComp)
   # table(Actual=y, Fitted=pSVM.original)
+  
   print("ID3")
   print(measureROC(binning.testLabel, pID3))
   print("RPART")
@@ -83,5 +85,34 @@ comb1 <- function(x, y){
   print("SVM use all Comp")
   print(measureROC(testLabel, pSVM.allComp))
   print("SVM use origin secom")
-  print(measureROC(y, pSVM.original))
+  print(measureROC(split.secom$test$LABEL, pSVM.original))
+  
+  # # Comparison of performance of algroithms.
+  #
+  summaryT <- NULL
+  tempT <- measureROC(binning.testLabel, pID3)
+  Algorithm <- "ID3"
+  summaryT <- rbind(summaryT, cbind(Algorithm, tempT$ROC.Rate))
+  
+  tempT <- measureROC(testLabel, pRPART)
+  Algorithm <- "RPART"
+  summaryT <- rbind(summaryT, cbind(Algorithm, tempT$ROC.Rate))
+  
+  tempT <- measureROC(testLabel, pC50)
+  Algorithm <- "C50"
+  summaryT <- rbind(summaryT, cbind(Algorithm, tempT$ROC.Rate))
+  
+  tempT <- measureROC(testLabel, pSVM)
+  Algorithm <- "SVM"
+  summaryT <- rbind(summaryT, cbind(Algorithm, tempT$ROC.Rate))
+  
+  tempT <- measureROC(testLabel, pSVM.allComp)
+  Algorithm <- "SVM.allComp"
+  summaryT <- rbind(summaryT, cbind(Algorithm, tempT$ROC.Rate))
+  
+  tempT <- measureROC(testLabel, pSVM.original)
+  Algorithm <- "SVM.original"
+  summaryT <- rbind(summaryT, cbind(Algorithm, tempT$ROC.Rate))
+  
+  print(summaryT)
 }

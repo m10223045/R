@@ -89,8 +89,9 @@ modelSVM.allComp <- svm(y ~ ., data = allComp.split$train, type='C-classificatio
 pSVM.allComp <- predict(modelSVM.allComp, subset(allComp.split$test), select = -y)
 
 # # SVM use original secom dataset.
-modelSVM.original <- svm(LABEL ~ ., data=secom, type='C-classification', kernel='linear')
-pSVM.original <- predict(modelSVM.original, secom)
+split.secom <- dataSplit(secom, secom$LABEL)
+modelSVM.original <- svm(LABEL ~ ., data=split.secom$train, type='C-classification', kernel='linear')
+pSVM.original <- predict(modelSVM.original, subset(split.secom$test, select = -LABEL))
 
 ###########################################################################
 # # Meesure of performace.
@@ -107,7 +108,7 @@ measureROC(testLabel, pRPART)
 measureROC(testLabel, pC50)
 measureROC(testLabel, pSVM)
 measureROC(testLabel, pSVM.allComp)
-measureROC(y, pSVM.original)
+measureROC(split.secom$test$LABEL, pSVM.original)
 
 
 
