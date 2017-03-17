@@ -15,3 +15,9 @@ plot.draw <- function(x, y, label){
   
   plot( x, y, pch=label, col = cols_t1)
 }
+
+plot.FactorLoading <- function(data, name = "Factor", cex=1.5, col="red", DESC=TRUE){
+  #dotchart(sort(copm5,decreasing=TRUE), main="Loading Plot for PC1", xlab="Variable Loadings", cex=1.5, col="red")
+  main <- paste("Loading Plot for",name)
+  dotchart(sort(data,decreasing=DESC), main=main, xlab="Variable Loadings", cex=1.5, col="red")
+}

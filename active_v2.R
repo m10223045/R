@@ -69,19 +69,20 @@ pID3 <- predict_ID3(binning.test, modelID3)
 modelRPART <- rpart(y~., data=train, method = "class")
 pRPART <- predict(modelRPART, test, type = "class")
 modelRPART.tree <- rpart(y~., data=train)
-plot(modelRPART.tree)
-text(modelRPART.tree)
+rpart.plot(modelRPART)
+# plot(modelRPART.tree, main="plot of rpart")
+# text(modelRPART.tree)
 
 # # C5.0
 modelC50 <- C5.0(subset(train, select = -y),as.factor(train$y))
 pC50 <- predict(modelC50, test)
-plot(modelC50)
+plot(modelC50, main="Plot of C5.0")
 
 # # SVM
 modelSVM <- svm(y ~ ., data=train, type='C-classification', kernel='linear')
 pSVM <- predict(modelSVM, test)
 
-# # SVM use all compenet from PAC s_c5.
+# # SVM use all compenet from PCA s_c5.
 allComp <- data.frame(cbind(cqpmData$pca_c5$scores, y))
 allComp <- dataBinning(allComp)
 allComp.split <- dataSplit(allComp, y)
@@ -92,6 +93,22 @@ pSVM.allComp <- predict(modelSVM.allComp, subset(allComp.split$test), select = -
 split.secom <- dataSplit(secom, secom$LABEL)
 modelSVM.original <- svm(LABEL ~ ., data=split.secom$train, type='C-classification', kernel='linear')
 pSVM.original <- predict(modelSVM.original, subset(split.secom$test, select = -LABEL))
+
+
+# #
+# unpcaData <- data.frame(cbind(x,y))
+# split.unpcaData <- dataSplit(unpcaData, y)
+# unpcaTrain <- split.unpcaData$train
+# unpcaTest <- split.unpcaData$test
+# 
+# unpcaTestLabel <- unpcaTest$y
+# unpcaTest <- subset(unpcaTest, select = -y)
+# 
+# nupcaModelC50 <- C5.0(subset(unpcaTrain, select = -y), as.factor(unpcaTrain$y))
+# unpcapC50 <-  predict(nupcaModelC50, unpcaTest)
+# 
+# plot(nupcaModelC50, main="Plot of C5.0")
+# measureROC(unpcaTestLabel, unpcapC50)
 
 ###########################################################################
 # # Meesure of performace.

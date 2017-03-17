@@ -22,8 +22,9 @@ measureROC <- function(actual, fitted, digits = 2){
   TN.rate <- TN/N
   FN.rate <- FN/P
   ACC <- (TP+TN)/(P+N)
+  Gmean <- sqrt(TP.rate*TN.rate)
   
-  ROC.Rate <- data.frame(cbind(TP.rate, TN.rate, FP.rate, FN.rate, ACC))
+  ROC.Rate <- data.frame(cbind(TP.rate, TN.rate, FP.rate, FN.rate, ACC, Gmean))
   ROC.Rate <- round(ROC.Rate, digits = 4)
   # colnames(ROC.Rate) <- c("TP.rate=TP/P", "FP.rate=FP/N", "TN.rate=TN/N", "FN.rate=FN/P", "ACC=(TP+TN)/(P+N)")
   
@@ -31,6 +32,7 @@ measureROC <- function(actual, fitted, digits = 2){
   
   list(Table = t, ROC.Rate = ROC.Rate, ROC.Condition = ROC.Condition)
 }
+
 
 #################################################################
 # # The R OOP class test.

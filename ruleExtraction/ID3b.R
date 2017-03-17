@@ -64,35 +64,40 @@ treePredict <- function(tree, features) {
 }
 
 ######################################################################
-##
-library(data.tree)
-data(mushroom)
-mushroom
-
-tree <- Node$new("mushroom")
-TrainID3(tree, mushroom)
-print(tree, "feature", "obsCount")
-treePredict(tree, c(color = 'red', 
-                size = 'large', 
-                points = 'yes')
-)
-
-
-##
-library(data.tree)
-data <-train
-
-tree <- Node$new("data")
-TrainID3(tree, data)
-print(tree, "feature", "obsCount")
-treePredict(tree, test[,1:22])
-
-##
-library(data.tree)
-# data <- data.frame(cbind(train,y))
-data <- train[1:5,20:23]
-tree <- Node$new("data")
-TrainID3(tree, data.frame(data))
-print(tree, "feature", "obsCount")
-temp <- test[,20:22]
-treePredict(tree, c(Comp.20 = -0.03, Comp.21 = 0.077, Comp.22 = 0.084))
+# tree <- Node$new("secom")
+# TrainID3(tree,binning.train)
+# print(tree, "feature", "obsCount")
+# treePredict(tree, binning.test)
+# 
+# ##
+# library(data.tree)
+# data(mushroom)
+# mushroom
+# 
+# tree <- Node$new("mushroom")
+# TrainID3(tree, mushroom)
+# print(tree, "feature", "obsCount")
+# treePredict(tree, c(color = 'red', 
+#                 size = 'large', 
+#                 points = 'yes')
+# )
+# 
+# 
+# ##
+# library(data.tree)
+# data <-train
+# 
+# tree <- Node$new("data")
+# TrainID3(tree, data)
+# print(tree, "feature", "obsCount")
+# treePredict(tree, test[,1:22])
+# 
+# ##
+# library(data.tree)
+# # data <- data.frame(cbind(train,y))
+# data <- train[1:5,20:23]
+# tree <- Node$new("data")
+# TrainID3(tree, data.frame(data))
+# print(tree, "feature", "obsCount")
+# temp <- test[,20:22]
+# treePredict(tree, c(Comp.20 = -0.03, Comp.21 = 0.077, Comp.22 = 0.084))
